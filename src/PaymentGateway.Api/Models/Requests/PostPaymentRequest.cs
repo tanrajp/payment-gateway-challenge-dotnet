@@ -1,11 +1,14 @@
-﻿namespace PaymentGateway.Api.Models.Requests;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security;
+
+namespace PaymentGateway.Api.Models.Requests;
 
 public class PostPaymentRequest
 {
-    public int CardNumberLastFour { get; set; }
+    public string CardNumber { get; set; }
     public int ExpiryMonth { get; set; }
     public int ExpiryYear { get; set; }
-    public string Currency { get; set; }
+    public Currency Currency { get; set; }
     public int Amount { get; set; }
-    public int Cvv { get; set; }
+    public string Cvv { get; set; }
 }

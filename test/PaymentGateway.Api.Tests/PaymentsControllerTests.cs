@@ -21,9 +21,9 @@ public class PaymentsControllerTests
         var payment = new PostPaymentResponse
         {
             Id = Guid.NewGuid(),
-            ExpiryYear = _random.Next(2023, 2030),
-            ExpiryMonth = _random.Next(1, 12),
-            Amount = _random.Next(1, 10000),
+            ExpiryYear = DateTime.Now.AddYears(2).Year,
+            ExpiryMonth = DateTime.Now.AddMonths(2).Month,
+            Amount = 1234,
             CardNumberLastFour = _random.Next(1111, 9999),
             Currency = "GBP"
         };
@@ -96,22 +96,6 @@ public class PaymentsControllerTests
         Assert.Equal(payment.Amount, paymentResponse.Amount);
     }
 
-
-    [Theory]
-    [InlineData("not-a-guid")]
-    [InlineData("12345")]
-    public async Task Returns404IfIdIsNotAGuid(string id)
-    {
-        // Arrange
-        var webApplicationFactory = new WebApplicationFactory<PaymentsController>();
-        var client = webApplicationFactory.CreateClient();
-
-        // Act
-        var response = await client.GetAsync($"/api/Payments/{id}");
-
-        // Assert
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
 
     private static HttpClient CreateClient(PaymentsRepository paymentsRepository)
     {

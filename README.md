@@ -16,3 +16,6 @@ PaymentGateway.sln
 ```
 
 Feel free to change the structure of the solution, use a different test library etc.
+
+## Improvements
+- Currency - instead of an enum use a currency provider or maintain a list.
