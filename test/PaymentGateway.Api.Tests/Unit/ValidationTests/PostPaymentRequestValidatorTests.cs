@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 
 using Microsoft.Extensions.Time.Testing;
 
@@ -8,7 +6,7 @@ using PaymentGateway.Api.Models;
 using PaymentGateway.Api.Models.Requests;
 using PaymentGateway.Api.Validation;
 
-namespace PaymentGateway.Api.Tests.ValidationTests
+namespace PaymentGateway.Api.Tests.Unit.ValidationTests
 {
     public class PostPaymentRequestValidatorTests
     {
@@ -20,7 +18,7 @@ namespace PaymentGateway.Api.Tests.ValidationTests
             CardNumber = "11122233344455",
             ExpiryMonth = 10,
             ExpiryYear = 2026,
-            Currency = Currency.GBP,
+            Currency = "GBP",
             Amount = 1050,
             Cvv = "123"
         };
@@ -154,5 +152,33 @@ namespace PaymentGateway.Api.Tests.ValidationTests
             result.ShouldNotHaveValidationErrorFor(x => x.Cvv);
         }
 
+        [Theory]
+        [InlineData("JPY")]
+        [InlineData("ABC")]
+        [InlineData("GB")]
+        [InlineData("gbp")]
+        [InlineData("")]
+        public void UnacceptableCurrencyIsInvalid(string currency)
+        {
+            var request = TestRequest();
+            request.Currency = currency;
+
+            var result = validator.TestValidate(request);
+            result.ShouldHaveValidationErrorFor(x => x.Currency)
+                .WithErrorMessage("Currency must be one of: GBP,EUR,USD");
+        }
+
+        [Theory]
+        [InlineData("GBP")]
+        [InlineData("EUR")]
+        [InlineData("USD")]
+        public void AcceptableCurrencyIsValid(string currency)
+        {
+            var request = TestRequest();
+            request.Currency = currency;
+
+            var result = validator.TestValidate(request);
+            result.ShouldNotHaveValidationErrorFor(x => x.Currency);
+        }
     }
 }

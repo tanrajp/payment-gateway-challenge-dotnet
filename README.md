@@ -19,3 +19,6 @@ Feel free to change the structure of the solution, use a different test library 
 
 ## Improvements
 - Currency - instead of an enum use a currency provider or maintain a list.
+- Future work, move bank client into its own project
+- Fixture to auto start container for tests.
+- What should happen with the authorization code?
