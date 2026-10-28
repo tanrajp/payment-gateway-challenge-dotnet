@@ -86,7 +86,7 @@ namespace PaymentGateway.Api.Tests.Integration
                 Cvv = "123"
             };
 
-            await Assert.ThrowsAsync<BanksServiceBadRequestException>(async () => await _bankClient.ProcessPayment(request, CancellationToken.None));
+            await Assert.ThrowsAsync<BankServiceBadRequestException>(async () => await _bankClient.ProcessPayment(request, CancellationToken.None));
         }
     }
 }

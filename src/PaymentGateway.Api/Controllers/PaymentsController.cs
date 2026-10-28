@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using PaymentGateway.Api.Enums;
 using PaymentGateway.Api.Exceptions;
-using PaymentGateway.Api.Models;
 using PaymentGateway.Api.Models.Requests;
 using PaymentGateway.Api.Models.Responses;
 using PaymentGateway.Api.Services;
@@ -11,7 +11,7 @@ namespace PaymentGateway.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PaymentsController : Controller
+public class PaymentsController : ControllerBase
 {
     private readonly PaymentsRepository _paymentsRepository;
     private readonly PostPaymentRequestValidator _validator;
@@ -42,28 +42,24 @@ public class PaymentsController : Controller
             var ret = await _paymentService.ProcessPayment(request, cancellationToken);
             return new OkObjectResult(ret);
         }
-        catch (BanksServiceBadRequestException bre)
+        catch (BankServiceBadRequestException bre)
         {
             return BadRequest(new
             {
                 status = PaymentStatus.Rejected,
                 errors = bre.Message
             });
-        }catch(BankServiceUnavailableException bse)
+        }catch(BankServiceUnavailableException)
         {
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new
             {
                 error = "Error posting payment, please  retry later"
             });
         }
-        catch(Exception e)
-        {
-            throw;
-        }
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<GetPaymentResponse?>> GetPaymentAsync(Guid id)
+    public async Task<ActionResult<PostPaymentResponse?>> GetPaymentAsync(Guid id)
     {
         var payment = _paymentsRepository.Get(id);
 

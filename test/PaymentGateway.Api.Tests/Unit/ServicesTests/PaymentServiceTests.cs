@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 
 using Moq;
 
 using PaymentGateway.Api.Clients;
+using PaymentGateway.Api.Enums;
 using PaymentGateway.Api.Exceptions;
-using PaymentGateway.Api.Models;
 using PaymentGateway.Api.Models.Requests;
 using PaymentGateway.Api.Models.Responses;
 using PaymentGateway.Api.Services;
-
-using Renci.SshNet;
 
 namespace PaymentGateway.Api.Tests.Unit.ServicesTests
 {
@@ -102,9 +94,9 @@ namespace PaymentGateway.Api.Tests.Unit.ServicesTests
 
             _mockBankClient
                 .Setup(x => x.ProcessPayment(It.IsAny<BankRequest>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new BanksServiceBadRequestException());
+                .ThrowsAsync(new BankServiceBadRequestException());
 
-            await Assert.ThrowsAsync<BanksServiceBadRequestException>(async () => await paymentService.ProcessPayment(request, CancellationToken.None));
+            await Assert.ThrowsAsync<BankServiceBadRequestException>(async () => await paymentService.ProcessPayment(request, CancellationToken.None));
             _mockBankClient.Verify(x => x.ProcessPayment(It.IsAny<BankRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 

@@ -1,4 +1,5 @@
 ﻿using PaymentGateway.Api.Clients;
+using PaymentGateway.Api.Enums;
 using PaymentGateway.Api.Helpers;
 using PaymentGateway.Api.Models.Requests;
 using PaymentGateway.Api.Models.Responses;
@@ -40,7 +41,7 @@ namespace PaymentGateway.Api.Services
             return new PostPaymentResponse
             {
                 Id = Guid.NewGuid(),
-                Status = bankResponse.Authorized ? Models.PaymentStatus.Authorized : Models.PaymentStatus.Declined,
+                Status = bankResponse.Authorized ? PaymentStatus.Authorized : PaymentStatus.Declined,
                 CardNumberLastFour = request.CardNumber.Substring(request.CardNumber.Length - 4),
                 ExpiryMonth = request.ExpiryMonth,
                 ExpiryYear = request.ExpiryYear,

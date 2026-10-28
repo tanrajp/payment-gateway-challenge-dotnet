@@ -44,7 +44,7 @@ namespace PaymentGateway.Api.Clients
                     var error = await response.Content.ReadAsStringAsync(cancellationToken);
                     string message = $"Bad request to bank with error {error}";
                     logger.LogError(message);
-                    throw new BanksServiceBadRequestException(error);
+                    throw new BankServiceBadRequestException(error);
                 }
             }
 

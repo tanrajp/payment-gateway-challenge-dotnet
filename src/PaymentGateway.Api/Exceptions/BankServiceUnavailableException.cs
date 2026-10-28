@@ -15,9 +15,5 @@ namespace PaymentGateway.Api.Exceptions
         public BankServiceUnavailableException(string? message, Exception? innerException) : base(message, innerException)
         {
         }
-
-        protected BankServiceUnavailableException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }
